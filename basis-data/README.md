@@ -202,12 +202,6 @@ ALTER TABLE Employee DROP CONSTRAINT Employee_DNum_FK;
 
 Kemudian insert lagi data employee
 
-### Tambah constraint lagi
-
-```
-ALTER TABLE Employee ADD CONSTRAINT Employee_DNum_FK FOREIGN KEY(DNum) REFERENCES Department(DNumber);
-```
-
 ### Insert data table Department
 
 ```
@@ -218,6 +212,12 @@ INSERT INTO Department VALUES(4,'PRODUKSI','E004','08-Mar-2005');
 ```
 
 Karena data table department sudah terisi, kita bisa langsung isikan data Employee ke table Employee
+
+### Tambah constraint lagi
+
+```
+ALTER TABLE Employee ADD CONSTRAINT Employee_DNum_FK FOREIGN KEY(DNum) REFERENCES Department(DNumber);
+```
 
 ### Insert data table Dept_locations
 
