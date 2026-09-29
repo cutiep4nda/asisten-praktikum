@@ -96,7 +96,6 @@ CREATE TABLE Employee(
     SuperSSN CHAR(9),
     DNum INT NOT NULL,
     CONSTRAINT Employee_SSN_PK PRIMARY KEY(SSN),
-    CONSTRAINT Employee_DNum_FK FOREIGN KEY(DNum) REFERENCES Department(DNumber),
     CONSTRAINT Employee_SuperSSN_FK FOREIGN KEY(SuperSSN) REFERENCES Employee(SSN));
 ```
 
