@@ -201,6 +201,14 @@ Akan muncul error, karena table Department belum ada datanya. Sehingga foreign k
 ALTER TABLE Employee DROP CONSTRAINT Employee_DNum_FK;
 ```
 
+Kemudian insert lagi data employee
+
+### Tambah constraint lagi
+
+```
+ALTER TABLE Employee ADD CONSTRAINT Employee_DNum_FK FOREIGN KEY(DNum) REFERENCES Department(DNumber);
+```
+
 ### Insert data table Department
 
 ```
