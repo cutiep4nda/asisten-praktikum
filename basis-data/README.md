@@ -398,3 +398,126 @@ CURRENT_USER        : untuk memberikan user database terbaru
 SELECT CURRENT_USER, CURENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP;
 SELECT SSN, FName, Age(CURRENT_DATE, BDate) AS Age FROM Employee ORDER BY Age ASC;
 ```
+
+# Praktikum 10
+
+```
+SELECT * FROM employee;
+
+-- Display all employe with its department name
+SELECT SSN, FName, LName, dnum, dnumber, DName
+FROM employee, department
+WHERE dnum = dnumber ORDER BY dnum;
+
+SELECT SSN, FName, LName, PName, P.DNum, D.DNumber, D.DName
+FROM Employee E, Project P, Department D, Works_On W
+WHERE E.SSN = W.ESSN AND
+W.PNum = P.PNumber AND P.DNum = D.DNumber AND E.DNum = P.DNum
+ORDER BY P.PName;
+
+SELECT SSN, FName, LName, DName
+FROM Employee JOIN Department ON DNum = DNumber
+ORDER BY DNum;
+
+
+
+SELECT SSN, FName, LName, PName, D.dname
+FROM Employee E JOIN Works_On W ON E.SSN = W.ESSN
+JOIN Project P ON W.PNum = P.PNumber AND E.DNum =
+P.DNum
+JOIN Department D ON P.DNum = D.DNumber
+ORDER BY P.PName;
+
+-- create new view
+CREATE VIEW v1 AS
+SELECT SSN, FName, LName, DNum
+FROM Employee;
+
+INSERT INTO Employee VALUES('E016','Muhammad',null,'Haidar','16-Jul-1987', 'BARA','M',3750000,'E003',3);
+
+-- show view
+SELECT * FROM v1;
+
+CREATE VIEW v2 (Nomor, Nama) AS SELECT DNumber, DName
+FROM Department;
+
+SELECT * FROM v2;
+
+
+CREATE VIEW v4 AS
+SELECT SSN, concat(FName, ' ', LName) AS EName, DName
+FROM Employee, Department
+WHERE DNum = DNumber;
+
+select * from v4;
+
+ALTER VIEW v1 AS SELECT DNum AS DNumber
+FROM employee E;
+
+alter view v1 as select * from employee;
+
+ALTER VIEW v1 RENAME TO ambilkaryawan;
+
+DROP VIEW ambilkaryawan;
+
+
+-- nested query
+SELECT PNum FROM Works_On;
+
+SELECT PName, PNumber
+FROM Project;
+
+SELECT PName
+FROM Project WHERE PNumber
+IN (SELECT PNum FROM Works_On);
+
+CREATE OR REPLACE FUNCTION sp_employee (num INT)
+RETURNS TABLE (
+	SSN VARCHAR(15), -- Change to match your actual column data types
+    FName VARCHAR(50),
+    LName VARCHAR(50),
+    DNum INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	RETURN QUERY
+	SELECT e.SSN, e.FName, e.LName, e.DNum
+	FROM Employee e
+	WHERE e.DNum = num;
+END;
+$$;
+
+select * from sp_employee(num => 1);
+
+DROP PROCEDURE sp_employee;
+
+
+
+
+
+CREATE TABLE TransactionLog( TableName VARCHAR(50) NOT NULL,
+Action VARCHAR(15) NOT NULL,
+Timestamp TIMESTAMP);
+
+CREATE TRIGGER DeleteEmployee
+AFTER DELETE ON Employee
+FOR EACH ROW
+EXECUTE FUNCTION funTrigger();
+
+
+CREATE OR REPLACE FUNCTION funTrigger()
+RETURNS TRIGGER AS $$
+BEGIN
+ INSERT INTO TransactionLog (TableName, Action, Timestamp)
+ VALUES ('Employee', 'DELETE', NOW());
+ RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+SELECT * FROM TransactionLog;
+
+SELECT * FROM EMPLOYEE WHERE ssn='E016';
+DELETE FROM employee WHERE SSN='E016';
+```
